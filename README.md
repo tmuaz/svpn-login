@@ -29,6 +29,8 @@ $ cd svpn-login
 
 ## Basic Usage (supports two-factor authentication):
 
+(Note that on NixOS, [`spvn` needs to be run as root](https://github.com/MatthiasLohr/docker-f5fpc/issues/14#issuecomment-599348777), but [NixOS does not support setuid](https://nixos.org/nix/manual/#ssec-derivation), so `svpn-login` needs to be run as root.)
+
 ```bash
 ./svpn-login.py --sessionid=0123456789abcdef0123456789abcdef [hostname]
 ```
