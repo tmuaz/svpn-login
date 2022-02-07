@@ -9,7 +9,7 @@ in
   pkgs.stdenv.mkDerivation {
     name = "svpn-login";
     nativeBuildInputs = [ pkgs.dpkg pkgs.autoPatchelfHook ];
-    buildInputs = with pkgs; [ (python38.withPackages (ps: [ps.requests])) ];
+    buildInputs = with pkgs; [ (python39.withPackages (ps: [ps.requests])) ];
     unpackPhase = ":";
     installPhase = ''
       dpkg -x ${./linux_f5vpn.x86_64.deb} $out
