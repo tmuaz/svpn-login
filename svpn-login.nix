@@ -1,19 +1,24 @@
 { pkgs }:
 
 let
-  svpn = if !(builtins.pathExists ./linux_f5vpn.x86_64.deb) then
-    throw "svpn-login needs linux_f5vpn.x86_64.deb"
+  svpn = let path = ./linux_f5vpn.x86_64.deb;
+  in if !(builtins.pathExists path) then
+    throw "svpn-login needs ${path}"
   else
-    ./linux_f5vpn.x86_64.deb;
+    path;
+  svpn-login = ./svpn-login.py;
 in pkgs.stdenv.mkDerivation {
   name = "svpn-login";
-  nativeBuildInputs = [ pkgs.dpkg pkgs.autoPatchelfHook ];
-  buildInputs = with pkgs; [ (python39.withPackages (ps: [ ps.requests ])) ];
+  nativeBuildInputs = with pkgs; [ autoPatchelfHook dpkg makeWrapper ];
+  buildInputs = with pkgs;
+    [ (python39.withPackages (pythonPkgs: [ pythonPkgs.requests ])) ];
   unpackPhase = ":";
   installPhase = ''
-    dpkg -x ${./linux_f5vpn.x86_64.deb} $out
+    dpkg -x ${svpn} $out
     install -m755 -D $out/opt/f5/vpn/svpn $out/bin/svpn
     rm -rf $out/opt
-    install -m755 -D ${./svpn-login.py} $out/bin/svpn-login
+    install -m755 -D ${svpn-login} $out/bin/svpn-login
+    wrapProgram $out/bin/svpn-login --prefix PATH : $out/bin
   '';
+  meta.mainProgram = "svpn-login";
 }
