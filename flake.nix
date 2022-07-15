@@ -1,4 +1,4 @@
-# E.g. nix run path:$(pwd) -- [arguments to svpn-login]
+# E.g. "nix run path:$(pwd) -- [arguments to svpn-login]" (impure)
 {
   description = "F5 SSL VPN Command-Line Client";
 
