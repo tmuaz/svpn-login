@@ -14,7 +14,7 @@
         else
           pkgs.callPackage ./svpn-login.nix {
             pkgs = pkgs;
-            svpn-path = ./linux_f5vpn.x86_64.deb;
+            svpn = ./linux_f5vpn.x86_64.deb;
           };
       overlay = final: prev: { svpn-login = ./svpn-login.nix; };
     };

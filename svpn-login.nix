@@ -1,4 +1,4 @@
-{ pkgs, svpn-path }:
+{ pkgs, svpn }:
 
 pkgs.stdenv.mkDerivation {
   name = "svpn-login";
@@ -7,7 +7,7 @@ pkgs.stdenv.mkDerivation {
     [ (python39.withPackages (pythonPkgs: [ pythonPkgs.requests ])) ];
   unpackPhase = ":";
   installPhase = ''
-    dpkg -x ${svpn-path} $out
+    dpkg -x ${svpn} $out
     install -m755 -D $out/opt/f5/vpn/svpn $out/bin/svpn
     rm -rf $out/opt
     install -m755 -D ${./svpn-login.py} $out/bin/svpn-login
