@@ -3,19 +3,20 @@
 {
   description = "F5 SSL VPN Command-Line Client";
 
-  outputs = { self, nixpkgs }:
+  outputs =
+    { self, nixpkgs }:
     let
       system = "x86_64-linux";
       pkgs = nixpkgs.legacyPackages.${system};
-    in {
-      packages.${system}.default =
-        if !(builtins.pathExists ./linux_f5vpn.x86_64.deb) then
-          throw "svpn-login needs linux_f5vpn.x86_64.deb"
-        else
-          pkgs.callPackage ./svpn-login.nix {
-            pkgs = pkgs;
-            svpn = ./linux_f5vpn.x86_64.deb;
-          };
+    in
+    {
+      packages.${system}.default = pkgs.callPackage ./svpn-login.nix {
+        pkgs = pkgs;
+        svpn = pkgs.fetchurl {
+          url = "https://itservicedesk.bham.ac.uk/sys_attachment.do?sys_id=242546471bc07610191a9978b04bcb82&view=true";
+          hash = "sha256-qWa4UlEFQau+gy9u4PYpfipCFTVUu9pk3QXY9xb4318=";
+        };
+      };
       overlay = final: prev: { svpn-login = ./svpn-login.nix; };
     };
 }
